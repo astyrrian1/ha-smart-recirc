@@ -19,6 +19,8 @@ def validate() -> None:
         assert "_vendor/leridian_smart_recirc/client.py" in names
         assert all(not Path(n).is_absolute() and ".." not in Path(n).parts for n in names)
         assert all(not n.startswith("custom_components/") for n in names)
+        assert archive.read("LICENSE") == (ROOT / "LICENSE").read_bytes()
+        assert b"MIT License" in archive.read("_vendor/LICENSE")
         manifest = json.loads(archive.read("manifest.json"))
         source_manifest = ROOT / "custom_components/smart_recirc/manifest.json"
         assert manifest == json.loads(source_manifest.read_text())

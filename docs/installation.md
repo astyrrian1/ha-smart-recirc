@@ -4,7 +4,7 @@ Tested target: Home Assistant 2026.9.2, Python 3.14. Full app parity is not impl
 
 ## Publication prerequisite
 
-[HACS supports only public GitHub repositories](https://www.hacs.xyz/docs/faq/private_repositories/). This repository must be public and have a published release with `smart_recirc.zip` attached. Publication needs owner approval and a distribution license selected in `LICENSE-STATUS.md`. The Python repository can stay private: the build checks out the exact revision in `library.lock.json`, builds its wheel and bundles its runtime package. That bundled source becomes public with the release; no GitHub credentials are shipped to HA.
+[HACS supports only public GitHub repositories](https://www.hacs.xyz/docs/faq/private_repositories/). This repository must be public and have a published release with `smart_recirc.zip` attached. The integration and bundled Python library use the MIT license. Public repository visibility and release publication still need owner approval. The Python repository can stay private: the build checks out the exact revision in `library.lock.json`, builds its wheel and bundles its runtime package. That bundled source becomes public with the release; no GitHub credentials are shipped to HA.
 
 ## Install or adopt an existing manual installation
 

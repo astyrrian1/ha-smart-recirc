@@ -31,3 +31,7 @@ HACS requires this integration repository and its releases to be public. The sep
 Make and test protocol changes in the Python repository. Update this repository's immutable lock in a new PR, install that revision and run the HA lifecycle tests and archive build. Changing only the Python repository never silently changes HA's dependency. Once an approved public package release exists, installation can be moved to an exact manifest requirement; private credentials must never be embedded in the manifest.
 
 Controller connections may re-enable smart timers. Password authentication, provisioning, firmware updates and maintenance operations remain unsupported. The full capability limits and evidence are preserved in `docs/`.
+
+## License
+
+Original integration code is [MIT licensed](LICENSE). The HACS release includes the integration license and the pinned Python library’s MIT notice.

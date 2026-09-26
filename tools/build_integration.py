@@ -38,6 +38,10 @@ def build(source: Path, output: Path) -> None:
                 or metadata["Version"] != lock["version"]
             ):
                 raise ValueError("Built wheel metadata does not match the dependency lock")
+            if metadata["License-Expression"] != "MIT":
+                raise ValueError("Expected the MIT-licensed protocol library")
+            license_path = metadata_path.removesuffix("METADATA") + "licenses/LICENSE"
+            library_license = dependency.read(license_path)
             package_files = [
                 n for n in dependency.namelist() if n.startswith("leridian_smart_recirc/")
             ]
@@ -55,7 +59,9 @@ def build(source: Path, output: Path) -> None:
                         and path.suffix != ".pyc"
                     ):
                         archive.write(path, str(relative))
+                archive.write(ROOT / "LICENSE", "LICENSE")
                 vendor = "_vendor"
+                archive.writestr(f"{vendor}/LICENSE", library_license)
                 for name in package_files:
                     archive.writestr(f"{vendor}/{name}", dependency.read(name))
                 archive.writestr(f"{vendor}/__init__.py", "")

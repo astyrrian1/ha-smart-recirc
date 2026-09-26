@@ -1,0 +1,17 @@
+{
+  "domain": "smart_recirc",
+  "name": "Leridian Smart Recirc",
+  "codeowners": [
+    "@astyrrian1"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/astyrrian1/ha-smart-recirc",
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "requirements": [],
+  "version": "0.3.0",
+  "zeroconf": [
+    "_SmartCirc._tcp.local."
+  ],
+  "issue_tracker": "https://github.com/astyrrian1/ha-smart-recirc/issues"
+}

@@ -1,0 +1,80 @@
+get_schedules:
+  name: Get schedules
+  description: Read controller-resident schedules. Weekdays are Monday through Sunday.
+  fields: &id001
+    config_entry_id: &id002
+      name: Integration entry
+      required: true
+      selector:
+        config_entry:
+          integration: smart_recirc
+get_logs:
+  name: Get logs
+  description: Read a bounded log snapshot. Response complete=false because no end
+    marker is known. Times use the controller local clock.
+  fields: *id001
+delete_schedule:
+  name: Delete schedule
+  description: Delete one slot only if the full snapshot still matches.
+  fields:
+    config_entry_id: *id002
+    slot: &id003
+      name: Slot
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 9
+          mode: box
+    expected_schedules: &id004
+      name: Expected schedules
+      description: Paste the schedules array returned by Get schedules. Rejects concurrent
+        edits.
+      required: true
+      selector:
+        object: {}
+set_schedule:
+  name: Set schedule
+  description: Create or replace one controller schedule. Requires HH:MM and seven
+    weekday booleans.
+  fields:
+    config_entry_id: *id002
+    slot: *id003
+    expected_schedules: *id004
+    start:
+      required: true
+      selector:
+        text: {}
+    end:
+      required: true
+      selector:
+        text: {}
+    weekdays:
+      required: true
+      description: Seven booleans, Monday through Sunday.
+      selector:
+        object: {}
+set_temperature_differences:
+  name: Set temperature differences
+  description: Atomically set both thresholds in Fahrenheit degrees; low must not
+    exceed high.
+  fields:
+    config_entry_id: *id002
+    low:
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 30
+          step: 1
+          mode: box
+          unit_of_measurement: "\xB0F"
+    high:
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 30
+          step: 1
+          mode: box
+          unit_of_measurement: "\xB0F"

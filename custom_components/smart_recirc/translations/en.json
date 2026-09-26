@@ -1,0 +1,34 @@
+{
+  "title": "Leridian Smart Recirc",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect controller",
+        "description": "Live local telemetry and controls over a persistent connection. Connections may re-enable smart timers. Password authentication is not supported.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "acknowledge_timer_effect": "I understand connections may re-enable smart timers"
+        }
+      },
+      "reconfigure": {
+        "title": "Change connection",
+        "description": "Connect to the same physical controller at its new address.",
+        "data": {
+          "host": "Host",
+          "port": "Port"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot read the controller. Check network access and controller availability.",
+      "unsupported_authentication": "Password authentication is not yet supported.",
+      "acknowledgment_required": "Acknowledge the possible timer effect before connecting.",
+      "wrong_device": "This is a different controller."
+    },
+    "abort": {
+      "already_configured": "Controller is already configured.",
+      "reconfigure_successful": "Connection updated."
+    }
+  }
+}

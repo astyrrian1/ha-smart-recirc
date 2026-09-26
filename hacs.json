@@ -1,0 +1,7 @@
+{
+  "name": "Leridian Smart Recirc",
+  "zip_release": true,
+  "filename": "smart_recirc.zip",
+  "hide_default_branch": true,
+  "homeassistant": "2026.9.2"
+}

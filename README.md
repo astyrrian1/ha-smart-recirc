@@ -22,7 +22,9 @@ python tools/build_integration.py
 
 The builder rejects a dirty or incorrectly pinned library checkout, builds a wheel, verifies its package name/version and places the wheel's library package inside the generated HA ZIP. It records dependency provenance and the wheel hash. The live HA server needs neither GitHub credentials nor an unpublished PyPI requirement. Generated `_vendor` files, dependency checkouts and archives are not maintained source and are excluded from Git.
 
-Download the `smart-recirc-installation` artifact from a successful run for the reviewed commit. Installing or upgrading HA is a separate operation; merging a PR does not deploy. No public package release is required by this private setup.
+Installation and updates use **HACS** and the `smart_recirc.zip` asset attached to a GitHub release. The archive contains the integration files at its root, as HACS requires; it is not extracted into the HA configuration root. See [installation and release workflow](docs/installation.md). CI artifacts are validation outputs, not the normal installation path. Merging a PR does not deploy.
+
+HACS requires this integration repository and its releases to be public. The separate Python repository may remain private, but its bundled runtime source is necessarily included in the public release asset. Until publication is approved and the first release is published, HACS installation is blocked.
 
 ## Updating the library
 

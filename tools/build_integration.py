@@ -54,8 +54,8 @@ def build(source: Path, output: Path) -> None:
                         and "__pycache__" not in relative.parts
                         and path.suffix != ".pyc"
                     ):
-                        archive.write(path, f"custom_components/smart_recirc/{relative}")
-                vendor = "custom_components/smart_recirc/_vendor"
+                        archive.write(path, str(relative))
+                vendor = "_vendor"
                 for name in package_files:
                     archive.writestr(f"{vendor}/{name}", dependency.read(name))
                 archive.writestr(f"{vendor}/__init__.py", "")

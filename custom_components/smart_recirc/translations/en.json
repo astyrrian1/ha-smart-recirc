@@ -30,5 +30,19 @@
       "already_configured": "Controller is already configured.",
       "reconfigure_successful": "Connection updated."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Flow meter calibration",
+        "description": "Select the installed meter to estimate flow in US gallons per minute. Leave unknown until the physical meter is confirmed. The raw pulse count remains available.",
+        "data": {
+          "flow_meter": "Installed flow meter"
+        },
+        "data_description": {
+          "flow_meter": "Leridian rates both calibrations to ±10% at the default 75 cs counting window. The integration adjusts for the controller's current Flow Meter Delay."
+        }
+      }
+    }
   }
 }

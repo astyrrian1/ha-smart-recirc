@@ -241,6 +241,22 @@
         },
         {
           "type": "tile",
+          "entity": "sensor.smartcirc_flow_rate",
+          "name": "Flow rate",
+          "tap_action": {
+            "action": "more-info"
+          },
+          "icon_tap_action": {
+            "action": "more-info"
+          },
+          "grid_options": {
+            "columns": 6,
+            "rows": 1
+          },
+          "icon": "mdi:water-outline"
+        },
+        {
+          "type": "tile",
           "entity": "sensor.smartcirc_flow_pulse_count",
           "name": "Flow pulses",
           "tap_action": {

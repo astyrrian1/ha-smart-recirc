@@ -10,6 +10,9 @@ from homeassistant.helpers import entity_registry as er
 from leridian_smart_recirc.simulator import Simulator
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
+from custom_components.smart_recirc.const import CONF_FLOW_METER, FLOW_METER_1, FLOW_METER_3_4
+from custom_components.smart_recirc.flow import gallons_per_minute
+
 DOMAIN = "smart_recirc"
 
 
@@ -41,7 +44,7 @@ async def test_setup_sensors_device_refresh_and_unload(hass, simulator):
     assert entry.runtime_data.client.connected
     registry = er.async_get(hass)
     entities = er.async_entries_for_config_entry(registry, entry.entry_id)
-    assert len(entities) == 22
+    assert len(entities) == 23
     assert len({e.device_id for e in entities}) == 1
     device = dr.async_get(hass).async_get(entities[0].device_id)
     assert device.sw_version == "6.2.2"
@@ -77,6 +80,55 @@ async def test_config_flow_acknowledgment_and_duplicates(hass, simulator):
     second = await hass.config_entries.flow.async_configure(second["flow_id"], data)
     assert second["type"] is FlowResultType.ABORT
     assert second["reason"] == "already_configured"
+
+
+@pytest.mark.parametrize(
+    ("meter", "expected"),
+    [(FLOW_METER_3_4, 2.71), (FLOW_METER_1, 4.28)],
+)
+def test_manufacturer_flow_calibration_accounts_for_delay(meter, expected):
+    # 39 pulses over 50 cs equals 58.5 pulses over the vendor's 75 cs reference.
+    assert gallons_per_minute(39, 50, meter) == expected
+    assert gallons_per_minute(0, 50, meter) == 0
+    assert gallons_per_minute(39, 0, meter) is None
+    assert gallons_per_minute(39, 50, "unknown") is None
+
+
+async def test_flow_rate_options_use_live_delay_without_reconnecting(hass, simulator):
+    import asyncio
+
+    from leridian_smart_recirc.identifiers import Identifier as I
+
+    simulator.values[I.FLOW_DELAY] = b"\x32"  # 50 cs
+    simulator.values[I.FLOW] = b"\x27"  # 39 pulses
+    entry = await setup_entry(hass, simulator)
+    entities = er.async_entries_for_config_entry(er.async_get(hass), entry.entry_id)
+    raw = next(e for e in entities if e.unique_id.endswith("_flow"))
+    rate = next(e for e in entities if e.unique_id.endswith("_flow_rate"))
+    assert hass.states.get(raw.entity_id).state == "39"
+    assert hass.states.get(rate.entity_id).state == "unknown"
+    before_requests = len(simulator.received)
+    flow = await hass.config_entries.options.async_init(entry.entry_id)
+    assert flow["type"] is FlowResultType.FORM
+    result = await hass.config_entries.options.async_configure(
+        flow["flow_id"], {CONF_FLOW_METER: FLOW_METER_3_4}
+    )
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    await hass.async_block_till_done()
+    state = hass.states.get(rate.entity_id)
+    assert float(state.state) == pytest.approx(2.71)
+    assert state.attributes["unit_of_measurement"] == "gal/min"
+    assert len(simulator.received) == before_requests
+    assert entry.runtime_data.client.connections == 1
+    await simulator.push(I.FLOW_DELAY, b"\x4b")  # 75 cs
+    for _ in range(100):
+        if entry.runtime_data.data.details["flow_delay"] == 75:
+            break
+        await asyncio.sleep(0.01)
+    await hass.async_block_till_done()
+    assert float(hass.states.get(rate.entity_id).state) == pytest.approx(1.86)
+    assert hass.states.get(raw.entity_id).state == "39"
+    await hass.config_entries.async_unload(entry.entry_id)
 
 
 async def test_diagnostics_are_allowlisted(hass, simulator):

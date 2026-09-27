@@ -1,10 +1,10 @@
-# Parity status — 0.3.0
+# Parity status — 0.4.0
 
 | Feature | Implementation/evidence |
 |---|---|
 | Persistent updates | Single TCP reader, partial-state merges, no periodic polling, reconnect backoff; see [push verification](persistent-push.md) |
 | Discovery, identity, firmware | Config flow and stable unique IDs; live HA verified |
-| Temperatures, delta, flow | Android 4.3.3 parser mapping, mode-0 reads on firmware 6.2.2; flow remains pulses |
+| Temperatures, delta, flow | Android 4.3.3 parser mapping, mode-0 reads on firmware 6.2.2; raw flow pulses preserved and optional [Leridian-calibrated GPM estimate](flow-calibration.md) added |
 | Pump, timer, faults | Binary sensors; validated one-byte reads and pushed updates |
 | Trigger/stop | Buttons; stop refuses an active schedule; waits for incoming status after one command/read exchange |
 | Basic/advanced settings | Five validated numbers; paired temperature thresholds action |

@@ -39,7 +39,10 @@ async def async_setup_entry(hass, entry: RecircConfigEntry) -> bool:
 
 
 async def _async_options_updated(hass, entry):
-    await hass.config_entries.async_reload(entry.entry_id)
+    # The meter selection changes only the local conversion. Keep the existing
+    # controller connection so this cannot re-enable smart timers.
+    coordinator = entry.runtime_data
+    coordinator.async_set_updated_data(coordinator.data)
 
 
 async def async_unload_entry(hass, entry: RecircConfigEntry) -> bool:

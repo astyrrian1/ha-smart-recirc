@@ -2,7 +2,7 @@
 
 Home Assistant integration and dashboards for Smart Recirculation Control 32. The independent Python protocol library lives in [leridian-smart-recirc](https://github.com/astyrrian1/leridian-smart-recirc).
 
-Version **0.3.0** uses a persistent local push connection with automatic reconnect and no periodic polling. It preserves 22 existing entities and supplies validated controls, schedules and bounded logs. See [installation](docs/installation.md), [push behavior and live verification](docs/persistent-push.md), [Mechanical dashboard](docs/dashboard.md) and [parity limitations](docs/parity-matrix.md).
+Version **0.4.0** uses a persistent local push connection with automatic reconnect and no periodic polling. It preserves 22 existing entities, adds an optional calibrated gallons-per-minute flow sensor, and supplies validated controls, schedules and bounded logs. See [installation](docs/installation.md), [flow calibration](docs/flow-calibration.md), [push behavior and live verification](docs/persistent-push.md), [Mechanical dashboard](docs/dashboard.md) and [parity limitations](docs/parity-matrix.md).
 
 ## Dependency and build
 
